@@ -74,30 +74,11 @@ Options:
 
 ```json
 {
-  "name": {
-    "full_name": "John Doe",
-    "first_name": "John",
-    "last_name": "Doe"
-  },
-  "company": {
-    "name": "Tech Corp",
-    "department": "Engineering"
-  },
+  "company": "Tech Corp",
+  "name": "John Doe",
+  "department": "Engineering",
   "title": "Software Engineer",
-  "contact": {
-    "phones": [
-      {"number": "+1-555-1234", "type": "office"}
-    ],
-    "emails": ["john@techcorp.com"],
-    "websites": ["https://techcorp.com"]
-  },
-  "address": {
-    "full_address": "123 Main St, San Francisco, CA 94102",
-    "city": "San Francisco",
-    "state": "CA",
-    "postal_code": "94102",
-    "country": "USA"
-  },
+  "email": "john@techcorp.com",
   "confidence": 0.95
 }
 ```

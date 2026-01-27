@@ -4,96 +4,69 @@ import json
 import pytest
 from unittest.mock import Mock
 
-from business_card.models.business_card import (
-    BusinessCard,
-    Name,
-    Company,
-    Phone,
-    Contact,
-    Address,
-)
-from business_card.ocr.base import OCRResult
+from business_card.models.business_card import BusinessCard
+from business_card.ocr.base import OCRBox, OCRResult
 from business_card.parser import BusinessCardParser
+from business_card.extractor.ollama import OllamaExtractor
 
 
 class TestBusinessCardModels:
     """Test Pydantic models."""
 
-    def test_name_model_full(self):
-        """Test Name model with all fields."""
-        name = Name(full_name="John Doe", first_name="John", last_name="Doe")
-        assert name.full_name == "John Doe"
-        assert name.first_name == "John"
-        assert name.last_name == "Doe"
-
-    def test_name_model_minimal(self):
-        """Test Name model with only required fields."""
-        name = Name(full_name="John Doe")
-        assert name.full_name == "John Doe"
-        assert name.first_name is None
-        assert name.last_name is None
-
-    def test_phone_model_default_type(self):
-        """Test Phone model default type."""
-        phone = Phone(number="+1-234-567-8900")
-        assert phone.number == "+1-234-567-8900"
-        assert phone.type == "other"
-
-    def test_phone_model_with_type(self):
-        """Test Phone model with explicit type."""
-        phone = Phone(number="+1-234-567-8900", type="mobile")
-        assert phone.type == "mobile"
-
     def test_business_card_minimal(self):
         """Test BusinessCard with minimal required fields."""
         card = BusinessCard(
-            name=Name(full_name="Test User"),
+            name="Test User",
             raw_text="OCR text here",
         )
-        assert card.name.full_name == "Test User"
+        assert card.name == "Test User"
         assert card.raw_text == "OCR text here"
         assert card.confidence == 0.0
-        assert card.company.name is None
-        assert card.contact.phones == []
+        assert card.company is None
+        assert card.department is None
+        assert card.title is None
+        assert card.email is None
 
     def test_business_card_full(self):
         """Test BusinessCard with all fields."""
         card = BusinessCard(
-            name=Name(full_name="John Doe", first_name="John", last_name="Doe"),
-            company=Company(name="Tech Corp", department="Engineering"),
+            company="Tech Corp",
+            name="John Doe",
+            department="Engineering",
             title="Senior Engineer",
-            contact=Contact(
-                phones=[Phone(number="+1-555-1234", type="office")],
-                emails=["john@techcorp.com"],
-                websites=["https://techcorp.com"],
-            ),
-            address=Address(
-                full_address="123 Main St, SF, CA 94102",
-                city="San Francisco",
-                state="CA",
-                postal_code="94102",
-                country="USA",
-            ),
+            email="john@techcorp.com",
             raw_text="Full OCR text",
             confidence=0.95,
         )
-        assert card.name.full_name == "John Doe"
-        assert card.company.name == "Tech Corp"
+        assert card.name == "John Doe"
+        assert card.company == "Tech Corp"
+        assert card.department == "Engineering"
         assert card.title == "Senior Engineer"
-        assert len(card.contact.phones) == 1
-        assert card.contact.phones[0].type == "office"
-        assert card.address.city == "San Francisco"
+        assert card.email == "john@techcorp.com"
         assert card.confidence == 0.95
 
     def test_business_card_json_serialization(self):
         """Test BusinessCard can be serialized to JSON."""
         card = BusinessCard(
-            name=Name(full_name="Test User"),
+            name="Test User",
             raw_text="Test",
         )
         json_str = card.model_dump_json()
         data = json.loads(json_str)
-        assert data["name"]["full_name"] == "Test User"
+        assert data["name"] == "Test User"
+
+    def test_business_card_confidence_bounds(self):
+        """Test confidence field bounds validation."""
+        # Valid confidence
+        card = BusinessCard(name="Test", raw_text="text", confidence=0.5)
+        assert card.confidence == 0.5
+
+        # Boundary values
+        card = BusinessCard(name="Test", raw_text="text", confidence=0.0)
+        assert card.confidence == 0.0
+
+        card = BusinessCard(name="Test", raw_text="text", confidence=1.0)
+        assert card.confidence == 1.0
 
 
 class TestBusinessCardParser:
@@ -114,9 +87,9 @@ class TestBusinessCardParser:
         mock_extractor = Mock()
         mock_extractor.name = "mock-extractor"
         mock_extractor.extract.return_value = BusinessCard(
-            name=Name(full_name="John Doe"),
+            name="John Doe",
             title="Software Engineer",
-            contact=Contact(emails=["john@example.com"]),
+            email="john@example.com",
             raw_text="John Doe\nSoftware Engineer\njohn@example.com",
             confidence=0.9,
         )
@@ -124,9 +97,9 @@ class TestBusinessCardParser:
         parser = BusinessCardParser(ocr=mock_ocr, extractor=mock_extractor)
         result = parser.parse("dummy.jpg")
 
-        assert result.name.full_name == "John Doe"
+        assert result.name == "John Doe"
         assert result.title == "Software Engineer"
-        assert "john@example.com" in result.contact.emails
+        assert result.email == "john@example.com"
         assert result.metadata is not None
         assert result.metadata.ocr_backend == "mock-ocr"
         assert result.metadata.extractor_backend == "mock-extractor"
@@ -163,12 +136,63 @@ class TestOCRResult:
     """Test OCRResult dataclass."""
 
     def test_ocr_result_creation(self):
-        """Test OCRResult can be created."""
+        """Test OCRResult can be created with OCRBox."""
+        box = OCRBox(text="Hello", confidence=0.95, bbox=(0.0, 0.0, 100.0, 20.0))
         result = OCRResult(
             text="Hello World",
             confidence=0.95,
-            boxes=[{"box": [[0, 0], [100, 0], [100, 20], [0, 20]], "text": "Hello"}],
+            boxes=[box],
         )
         assert result.text == "Hello World"
         assert result.confidence == 0.95
         assert len(result.boxes) == 1
+        assert result.boxes[0].text == "Hello"
+
+
+class TestOCRBox:
+    """Test OCRBox dataclass."""
+
+    def test_ocr_box_creation(self):
+        """Test OCRBox can be created."""
+        box = OCRBox(text="Test", confidence=0.9, bbox=(10.0, 20.0, 110.0, 50.0))
+        assert box.text == "Test"
+        assert box.confidence == 0.9
+        assert box.bbox == (10.0, 20.0, 110.0, 50.0)
+
+    def test_ocr_box_center_y(self):
+        """Test OCRBox center_y property."""
+        box = OCRBox(text="Test", confidence=0.9, bbox=(0.0, 100.0, 50.0, 140.0))
+        assert box.center_y == 120.0  # (100 + 140) / 2
+
+    def test_ocr_box_x_min(self):
+        """Test OCRBox x_min property."""
+        box = OCRBox(text="Test", confidence=0.9, bbox=(25.0, 100.0, 75.0, 140.0))
+        assert box.x_min == 25.0
+
+
+class TestOllamaExtractor:
+    """Test OllamaExtractor methods."""
+
+    def test_extract_json_from_code_block(self):
+        """Test extracting JSON from markdown code blocks."""
+        extractor = OllamaExtractor()
+
+        text = '```json\n{"name": "Test"}\n```'
+        result = extractor._extract_json(text)
+        assert result == '{"name": "Test"}'
+
+    def test_extract_json_raw(self):
+        """Test extracting raw JSON object."""
+        extractor = OllamaExtractor()
+
+        text = 'Some text {"name": "Test"} more text'
+        result = extractor._extract_json(text)
+        assert result == '{"name": "Test"}'
+
+    def test_extractor_name(self):
+        """Test extractor name property."""
+        extractor = OllamaExtractor(model="llama3.2")
+        assert extractor.name == "ollama:llama3.2"
+
+        extractor = OllamaExtractor(model="qwen2")
+        assert extractor.name == "ollama:qwen2"

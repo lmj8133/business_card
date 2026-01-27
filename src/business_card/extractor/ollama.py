@@ -6,52 +6,26 @@ import re
 import httpx
 
 from business_card.extractor.base import Extractor
-from business_card.models.business_card import (
-    BusinessCard,
-    Name,
-    Company,
-    Phone,
-    Contact,
-    Address,
-)
+from business_card.models.business_card import BusinessCard
 
 SYSTEM_PROMPT = """You are a business card information extractor.
-Extract structured contact information from OCR text of a business card.
+Extract structured contact information from OCR text.
 
-Return ONLY a valid JSON object with the following structure (no markdown, no explanation):
+Return ONLY a valid JSON object with this structure (no markdown, no explanation):
 {
-  "name": {
-    "full_name": "string (required)",
-    "first_name": "string or null",
-    "last_name": "string or null"
-  },
-  "company": {
-    "name": "string or null",
-    "department": "string or null"
-  },
+  "company": "string or null",
+  "name": "string (required)",
+  "department": "string or null",
   "title": "string or null",
-  "contact": {
-    "phones": [{"number": "string", "type": "office|mobile|fax|other"}],
-    "emails": ["string"],
-    "websites": ["string"]
-  },
-  "address": {
-    "full_address": "string or null",
-    "city": "string or null",
-    "state": "string or null",
-    "postal_code": "string or null",
-    "country": "string or null"
-  },
+  "email": "string or null",
   "confidence": 0.0-1.0
 }
 
 Guidelines:
-- Extract all visible information from the OCR text
-- Normalize phone numbers (keep country codes if present)
-- Identify phone types: mobile numbers typically start with cell prefixes, office phones have extensions
-- For names, try to split into first/last name if possible
-- Set confidence based on OCR text quality and completeness
-- If information is unclear or missing, use null
+- Cross-validate company name with email domain (e.g., if email is "@algoltek.com", company is likely "Algoltek")
+- If multiple emails exist, pick the primary one (typically the person's own email)
+- Split names by case transitions: "MJLi" -> "MJ Li", "JohnSmith" -> "John Smith"
+- Common OCR confusions: L↔I, O↔0, 1↔l - use context to resolve
 - Always return valid JSON"""
 
 USER_PROMPT_TEMPLATE = """Extract business card information from this OCR text:
@@ -124,7 +98,6 @@ class OllamaExtractor(Extractor):
 
     def _parse_response(self, response: str, ocr_text: str) -> BusinessCard:
         """Parse Ollama response into BusinessCard."""
-        # Try to extract JSON from the response
         json_str = self._extract_json(response)
 
         try:
@@ -132,50 +105,12 @@ class OllamaExtractor(Extractor):
         except json.JSONDecodeError as e:
             raise ValueError(f"Invalid JSON response from LLM: {e}") from e
 
-        # Build BusinessCard from parsed data
-        name_data = data.get("name", {})
-        name = Name(
-            full_name=name_data.get("full_name", "Unknown"),
-            first_name=name_data.get("first_name"),
-            last_name=name_data.get("last_name"),
-        )
-
-        company_data = data.get("company", {})
-        company = Company(
-            name=company_data.get("name"),
-            department=company_data.get("department"),
-        )
-
-        contact_data = data.get("contact", {})
-        phones = [
-            Phone(
-                number=p.get("number", ""),
-                type=p.get("type", "other"),
-            )
-            for p in contact_data.get("phones", [])
-            if p.get("number")
-        ]
-        contact = Contact(
-            phones=phones,
-            emails=contact_data.get("emails", []),
-            websites=contact_data.get("websites", []),
-        )
-
-        address_data = data.get("address", {})
-        address = Address(
-            full_address=address_data.get("full_address"),
-            city=address_data.get("city"),
-            state=address_data.get("state"),
-            postal_code=address_data.get("postal_code"),
-            country=address_data.get("country"),
-        )
-
         return BusinessCard(
-            name=name,
-            company=company,
+            company=data.get("company"),
+            name=data.get("name", "Unknown"),
+            department=data.get("department"),
             title=data.get("title"),
-            contact=contact,
-            address=address,
+            email=data.get("email"),
             raw_text=ocr_text,
             confidence=data.get("confidence", 0.0),
         )

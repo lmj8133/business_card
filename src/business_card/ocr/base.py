@@ -1,8 +1,32 @@
 """Abstract base class for OCR backends."""
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+
+
+@dataclass
+class OCRBox:
+    """Single OCR detection with position."""
+
+    text: str
+    """Detected text content."""
+
+    confidence: float
+    """Confidence score (0.0-1.0)."""
+
+    bbox: tuple[float, float, float, float]
+    """Bounding box as (x_min, y_min, x_max, y_max)."""
+
+    @property
+    def center_y(self) -> float:
+        """Vertical center for line grouping."""
+        return (self.bbox[1] + self.bbox[3]) / 2
+
+    @property
+    def x_min(self) -> float:
+        """Left edge x coordinate."""
+        return self.bbox[0]
 
 
 @dataclass
@@ -15,8 +39,8 @@ class OCRResult:
     confidence: float
     """Average confidence score (0.0-1.0)."""
 
-    boxes: list[dict]
-    """List of detected text boxes with positions and text."""
+    boxes: list[OCRBox] = field(default_factory=list)
+    """List of detected text boxes with positions."""
 
 
 class OCRBackend(ABC):

@@ -116,38 +116,33 @@ def _print_formatted(card):
     """Print formatted business card info."""
     from rich.table import Table
 
-    # Name and title
     console.print()
-    console.print(f"[bold cyan]{card.name.full_name}[/bold cyan]")
+
+    # Name
+    console.print(f"[bold cyan]{card.name}[/bold cyan]")
+
+    # Title
     if card.title:
         console.print(f"[dim]{card.title}[/dim]")
-    if card.company.name:
-        company_str = card.company.name
-        if card.company.department:
-            company_str += f" - {card.company.department}"
+
+    # Company and department
+    if card.company:
+        company_str = card.company
+        if card.department:
+            company_str += f" - {card.department}"
         console.print(f"[green]{company_str}[/green]")
+    elif card.department:
+        console.print(f"[green]{card.department}[/green]")
 
     console.print()
 
     # Contact info table
-    if card.contact.phones or card.contact.emails or card.contact.websites:
+    if card.email:
         table = Table(show_header=False, box=None)
         table.add_column("Type", style="dim")
         table.add_column("Value")
-
-        for phone in card.contact.phones:
-            table.add_row(f"Phone ({phone.type})", phone.number)
-        for email in card.contact.emails:
-            table.add_row("Email", email)
-        for website in card.contact.websites:
-            table.add_row("Website", website)
-
+        table.add_row("Email", card.email)
         console.print(table)
-
-    # Address
-    if card.address.full_address:
-        console.print()
-        console.print(f"[dim]Address:[/dim] {card.address.full_address}")
 
     # Metadata
     if card.metadata:

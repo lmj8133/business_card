@@ -5,7 +5,7 @@ from pathlib import Path
 
 from paddleocr import PaddleOCR
 
-from business_card.ocr.base import OCRBackend, OCRResult
+from business_card.ocr.base import OCRBackend, OCRBox, OCRResult
 
 
 # Disable OneDNN/MKLDNN to avoid PIR compatibility issues with PaddlePaddle 3.x
@@ -55,12 +55,17 @@ class PaddleOCRBackend(OCRBackend):
 
         boxes = []
         for text, score, poly in zip(texts, scores, polys):
+            # Convert polygon to bounding box (x_min, y_min, x_max, y_max)
+            poly_list = poly.tolist() if hasattr(poly, "tolist") else poly
+            xs = [p[0] for p in poly_list]
+            ys = [p[1] for p in poly_list]
+            bbox = (min(xs), min(ys), max(xs), max(ys))
             boxes.append(
-                {
-                    "box": poly.tolist() if hasattr(poly, "tolist") else poly,
-                    "text": text,
-                    "confidence": float(score),
-                }
+                OCRBox(
+                    text=text,
+                    confidence=float(score),
+                    bbox=bbox,
+                )
             )
 
         avg_confidence = sum(scores) / len(scores) if scores else 0.0
