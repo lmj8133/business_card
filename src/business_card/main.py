@@ -11,6 +11,7 @@ from rich.panel import Panel
 from business_card.ocr.paddle_ocr import PaddleOCRBackend
 from business_card.extractor.ollama import OllamaExtractor
 from business_card.parser import BusinessCardParser
+from business_card.batch import BatchProcessor
 
 app = typer.Typer(
     name="bcparser",
@@ -154,6 +155,89 @@ def _print_formatted(card):
         )
 
     console.print()
+
+
+@app.command()
+def batch(
+    inputs: Annotated[
+        list[Path],
+        typer.Argument(
+            help="Image files or directories to process",
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file path (JSON or CSV)",
+        ),
+    ],
+    format: Annotated[
+        str,
+        typer.Option(
+            "--format",
+            "-f",
+            help="Output format: json or csv",
+        ),
+    ] = "json",
+    extractor: Annotated[
+        str,
+        typer.Option(
+            "--extractor",
+            "-e",
+            help="Extractor backend: ollama:<model>",
+        ),
+    ] = "ollama:llama3.2",
+    lang: Annotated[
+        str,
+        typer.Option(
+            "--lang",
+            "-l",
+            help="OCR language (default: en)",
+        ),
+    ] = "en",
+):
+    """Process multiple business card images."""
+    # Validate format
+    format = format.lower()
+    if format not in ("json", "csv"):
+        console.print(f"[red]Error:[/red] Invalid format '{format}'. Use 'json' or 'csv'.")
+        raise typer.Exit(1)
+
+    # Initialize parser
+    ocr = PaddleOCRBackend(lang=lang)
+    extractor_instance = _create_extractor(extractor)
+    parser = BusinessCardParser(ocr=ocr, extractor=extractor_instance)
+    processor = BatchProcessor(parser)
+
+    # Collect images
+    images = processor.collect_images(inputs)
+
+    if not images:
+        console.print("[yellow]Warning:[/yellow] No images found to process.")
+        raise typer.Exit(0)
+
+    console.print(f"Processing {len(images)} image(s)...")
+
+    # Process batch
+    result = processor.process(images)
+
+    # Format output
+    if format == "csv":
+        content = processor.to_csv(result)
+    else:
+        content = processor.to_json(result)
+
+    # Write output
+    output.write_text(content, encoding="utf-8")
+
+    # Print summary
+    console.print(
+        f"[green]Done:[/green] {result.succeeded} succeeded, "
+        f"{result.failed} failed, {result.total_time_ms:.1f}ms total"
+    )
+    console.print(f"Output: {output}")
 
 
 @app.command()

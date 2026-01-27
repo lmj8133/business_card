@@ -196,3 +196,29 @@ class TestOllamaExtractor:
 
         extractor = OllamaExtractor(model="qwen2")
         assert extractor.name == "ollama:qwen2"
+
+    def test_to_str_with_string(self):
+        """Test _to_str returns string as-is."""
+        extractor = OllamaExtractor()
+        assert extractor._to_str("hello") == "hello"
+
+    def test_to_str_with_none(self):
+        """Test _to_str returns None for None input."""
+        extractor = OllamaExtractor()
+        assert extractor._to_str(None) is None
+
+    def test_to_str_with_list(self):
+        """Test _to_str takes first element from list."""
+        extractor = OllamaExtractor()
+        assert extractor._to_str(["first", "second"]) == "first"
+
+    def test_to_str_with_empty_list(self):
+        """Test _to_str returns None for empty list."""
+        extractor = OllamaExtractor()
+        assert extractor._to_str([]) is None
+
+    def test_to_str_with_number(self):
+        """Test _to_str converts number to string."""
+        extractor = OllamaExtractor()
+        assert extractor._to_str(123) == "123"
+        assert extractor._to_str(0.95) == "0.95"

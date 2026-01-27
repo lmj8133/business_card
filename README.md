@@ -5,7 +5,9 @@ Parse business card images and extract structured contact information using OCR 
 ## Features
 
 - **OCR**: PaddleOCR for text extraction from images
+- **Auto ROI Detection**: Automatic card region detection and cropping to reduce memory usage
 - **LLM Extraction**: Ollama for structured data parsing
+- **Batch Processing**: Process multiple images with JSON/CSV output
 - **Structured Output**: Pydantic models with full type safety
 - **CLI**: Simple command-line interface
 
@@ -68,6 +70,41 @@ Options:
   -j, --json             Output raw JSON
   --ocr-only             Only run OCR, skip LLM extraction
   --help                 Show help message
+```
+
+### Batch Processing
+
+Process multiple images at once:
+
+```bash
+# Process a directory of images
+uv run bcparser batch ./cards/ -o results.json
+
+# Process specific files
+uv run bcparser batch card1.jpg card2.jpg -o results.json
+
+# Output as CSV
+uv run bcparser batch ./cards/ -o results.csv --format csv
+```
+
+## Auto ROI Detection
+
+The parser automatically detects and crops the business card region from photos. This significantly reduces memory usage when processing high-resolution images (e.g., 4032x3024 phone photos).
+
+**Detection strategies** (tried in order):
+1. White region detection - for white cards on darker backgrounds
+2. Adaptive thresholding - handles varying lighting
+3. Canny edge detection - standard edge-based detection
+4. Morphological gradient - finds object boundaries
+
+**Fallback behavior**: If card detection fails, the image is resized to max 2000px to prevent memory issues.
+
+To disable auto-crop:
+
+```python
+from business_card.ocr import PaddleOCRBackend
+
+ocr = PaddleOCRBackend(lang="en", auto_crop=False)
 ```
 
 ## Output Example

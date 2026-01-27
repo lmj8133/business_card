@@ -2,6 +2,7 @@
 
 import json
 import re
+from typing import Any
 
 import httpx
 
@@ -106,14 +107,22 @@ class OllamaExtractor(Extractor):
             raise ValueError(f"Invalid JSON response from LLM: {e}") from e
 
         return BusinessCard(
-            company=data.get("company"),
-            name=data.get("name", "Unknown"),
-            department=data.get("department"),
-            title=data.get("title"),
-            email=data.get("email"),
+            company=self._to_str(data.get("company")),
+            name=self._to_str(data.get("name")) or "Unknown",
+            department=self._to_str(data.get("department")),
+            title=self._to_str(data.get("title")),
+            email=self._to_str(data.get("email")),
             raw_text=ocr_text,
             confidence=data.get("confidence", 0.0),
         )
+
+    def _to_str(self, value: Any) -> str | None:
+        """Convert value to string, handling lists by taking first element."""
+        if value is None:
+            return None
+        if isinstance(value, list):
+            return value[0] if value else None
+        return str(value)
 
     def _extract_json(self, text: str) -> str:
         """Extract JSON from text, handling potential markdown code blocks."""

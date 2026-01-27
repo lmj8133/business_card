@@ -1,11 +1,17 @@
 """PaddleOCR backend implementation."""
 
+import logging
 import os
+import tempfile
 from pathlib import Path
 
+import cv2
 from paddleocr import PaddleOCR
 
 from business_card.ocr.base import OCRBackend, OCRBox, OCRResult
+from business_card.preprocessing import CardDetector
+
+logger = logging.getLogger(__name__)
 
 
 # Disable OneDNN/MKLDNN to avoid PIR compatibility issues with PaddlePaddle 3.x
@@ -19,14 +25,18 @@ class PaddleOCRBackend(OCRBackend):
     def __init__(
         self,
         lang: str = "en",
+        auto_crop: bool = True,
     ):
         """
         Initialize PaddleOCR backend.
 
         Args:
             lang: Language for OCR. Default is "en" for English.
+            auto_crop: Enable automatic card region detection and cropping.
         """
         self._lang = lang
+        self._auto_crop = auto_crop
+        self._detector = CardDetector() if auto_crop else None
         self._ocr = PaddleOCR(lang=lang, enable_mkldnn=False)
 
     @property
@@ -39,7 +49,27 @@ class PaddleOCRBackend(OCRBackend):
         if not path.exists():
             raise FileNotFoundError(f"Image not found: {path}")
 
-        result = self._ocr.predict(str(path))
+        # Try auto-crop to reduce image size and focus on card region
+        temp_path = None
+        ocr_input = str(path)
+
+        if self._detector:
+            cropped = self._detector.detect(path, fallback_resize=True)
+            if cropped is not None:
+                # Save cropped image to temp file
+                fd, temp_file = tempfile.mkstemp(suffix=".jpg")
+                os.close(fd)
+                temp_path = Path(temp_file)
+                cv2.imwrite(str(temp_path), cropped)
+                ocr_input = str(temp_path)
+                logger.debug("Auto-cropped card region saved to: %s", temp_path)
+
+        try:
+            result = self._ocr.predict(ocr_input)
+        finally:
+            # Clean up temp file
+            if temp_path and temp_path.exists():
+                temp_path.unlink()
 
         if not result or not result[0]:
             return OCRResult(text="", confidence=0.0, boxes=[])
