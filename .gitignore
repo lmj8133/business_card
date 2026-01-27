@@ -23,6 +23,8 @@ wheels/
 .pytest_cache/
 .coverage
 htmlcov/
+tests/fixtures/
+results.json
 
 # PaddleOCR cache
 .paddlex/
