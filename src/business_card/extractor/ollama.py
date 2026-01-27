@@ -16,8 +16,7 @@ Return ONLY a valid JSON object with this structure (no markdown, no explanation
 {
   "company": "string or null",
   "name": "string (required)",
-  "department": "string or null",
-  "title": "string or null",
+  "position": "string or null (combine department and title, e.g. 'Sales Dept, Manager')",
   "email": "string or null",
   "confidence": 0.0-1.0
 }
@@ -109,8 +108,7 @@ class OllamaExtractor(Extractor):
         return BusinessCard(
             company=self._to_str(data.get("company")),
             name=self._to_str(data.get("name")) or "Unknown",
-            department=self._to_str(data.get("department")),
-            title=self._to_str(data.get("title")),
+            position=self._to_str(data.get("position")),
             email=self._to_str(data.get("email")),
             raw_text=ocr_text,
             confidence=data.get("confidence", 0.0),

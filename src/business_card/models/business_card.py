@@ -16,8 +16,9 @@ class BusinessCard(BaseModel):
 
     company: str | None = Field(default=None, description="Company name")
     name: str = Field(description="Person's full name")
-    department: str | None = Field(default=None, description="Department")
-    title: str | None = Field(default=None, description="Job title")
+    position: str | None = Field(
+        default=None, description="Job position (department and/or title)"
+    )
     email: str | None = Field(default=None, description="Email address")
 
     raw_text: str = Field(description="Raw OCR text for reference")

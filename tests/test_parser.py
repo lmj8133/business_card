@@ -23,8 +23,7 @@ class TestBusinessCardModels:
         assert card.raw_text == "OCR text here"
         assert card.confidence == 0.0
         assert card.company is None
-        assert card.department is None
-        assert card.title is None
+        assert card.position is None
         assert card.email is None
 
     def test_business_card_full(self):
@@ -32,16 +31,14 @@ class TestBusinessCardModels:
         card = BusinessCard(
             company="Tech Corp",
             name="John Doe",
-            department="Engineering",
-            title="Senior Engineer",
+            position="Engineering, Senior Engineer",
             email="john@techcorp.com",
             raw_text="Full OCR text",
             confidence=0.95,
         )
         assert card.name == "John Doe"
         assert card.company == "Tech Corp"
-        assert card.department == "Engineering"
-        assert card.title == "Senior Engineer"
+        assert card.position == "Engineering, Senior Engineer"
         assert card.email == "john@techcorp.com"
         assert card.confidence == 0.95
 
@@ -88,7 +85,7 @@ class TestBusinessCardParser:
         mock_extractor.name = "mock-extractor"
         mock_extractor.extract.return_value = BusinessCard(
             name="John Doe",
-            title="Software Engineer",
+            position="Software Engineer",
             email="john@example.com",
             raw_text="John Doe\nSoftware Engineer\njohn@example.com",
             confidence=0.9,
@@ -98,7 +95,7 @@ class TestBusinessCardParser:
         result = parser.parse("dummy.jpg")
 
         assert result.name == "John Doe"
-        assert result.title == "Software Engineer"
+        assert result.position == "Software Engineer"
         assert result.email == "john@example.com"
         assert result.metadata is not None
         assert result.metadata.ocr_backend == "mock-ocr"
