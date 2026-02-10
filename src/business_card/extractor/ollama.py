@@ -23,6 +23,9 @@ Return ONLY a valid JSON object with this structure (no markdown, no explanation
 
 Guidelines:
 - Cross-validate company name with email domain (e.g., if email is "@algoltek.com", company is likely "Algoltek")
+- Cross-validate name with email prefix (e.g., "jeff.fu@" suggests name is "Jeff Fu"; use to fix OCR errors like "Jeft Fu" -> "Jeff Fu")
+- Cross-validate email prefix with name (e.g., if name is "Jeff Fu" but email shows "jeft.fu@", correct to "jeff.fu@")
+- When name and email prefix conflict, prefer email (more reliable OCR) unless email is abbreviated or doesn't contain name info
 - If multiple emails exist, pick the primary one (typically the person's own email)
 - Split names by case transitions: "MJLi" -> "MJ Li", "JohnSmith" -> "John Smith"
 - Common OCR confusions: L↔I, O↔0, 1↔l - use context to resolve
