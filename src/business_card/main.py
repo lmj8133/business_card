@@ -62,6 +62,13 @@ def parse(
             help="OCR language (default: en)",
         ),
     ] = "en",
+    ollama_url: Annotated[
+        str,
+        typer.Option(
+            "--ollama-url",
+            help="Ollama server base URL (default: http://localhost:11434)",
+        ),
+    ] = "http://localhost:11434",
 ):
     """Parse a business card image and extract contact information."""
     try:
@@ -80,7 +87,7 @@ def parse(
             return
 
         # Initialize extractor
-        extractor_instance = _create_extractor(extractor)
+        extractor_instance = _create_extractor(extractor, ollama_url)
 
         # Parse the image
         parser = BusinessCardParser(ocr=ocr, extractor=extractor_instance)
@@ -99,7 +106,7 @@ def parse(
         raise typer.Exit(1)
 
 
-def _create_extractor(extractor_spec: str) -> OllamaExtractor:
+def _create_extractor(extractor_spec: str, base_url: str = "http://localhost:11434") -> OllamaExtractor:
     """Create extractor instance from spec string."""
     if ":" in extractor_spec:
         backend, model = extractor_spec.split(":", 1)
@@ -108,7 +115,7 @@ def _create_extractor(extractor_spec: str) -> OllamaExtractor:
         model = None
 
     if backend == "ollama":
-        return OllamaExtractor(model=model or "llama3.2")
+        return OllamaExtractor(model=model or "llama3.2", base_url=base_url)
     else:
         raise ValueError(f"Unknown extractor backend: {backend}. Use 'ollama:<model>'")
 
@@ -197,6 +204,13 @@ def batch(
             help="OCR language (default: en)",
         ),
     ] = "en",
+    ollama_url: Annotated[
+        str,
+        typer.Option(
+            "--ollama-url",
+            help="Ollama server base URL (default: http://localhost:11434)",
+        ),
+    ] = "http://localhost:11434",
 ):
     """Process multiple business card images."""
     # Validate format
@@ -207,7 +221,7 @@ def batch(
 
     # Initialize parser
     ocr = PaddleOCRBackend(lang=lang)
-    extractor_instance = _create_extractor(extractor)
+    extractor_instance = _create_extractor(extractor, ollama_url)
     parser = BusinessCardParser(ocr=ocr, extractor=extractor_instance)
     processor = BatchProcessor(parser)
 

@@ -54,6 +54,12 @@ struct SettingsView: View {
                         }
                     }
                     .disabled(isTesting)
+
+                    if case .failure(let msg) = connectionStatus {
+                        Text(msg)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    }
                 }
 
                 Section("OCR") {
