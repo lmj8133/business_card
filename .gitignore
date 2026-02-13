@@ -32,3 +32,13 @@ results.json
 # Test images (user-specific)
 card.jpg
 card.png
+
+# Xcode
+BusinessCardScanner/build/
+BusinessCardScanner/*.xcodeproj/xcuserdata/
+BusinessCardScanner/*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
