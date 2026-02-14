@@ -31,11 +31,13 @@ struct CardDetailView: View {
 
             // Metadata
             Section("Details") {
+                #if DEBUG
                 HStack {
                     Text("Confidence")
                     Spacer()
                     ConfidenceBadge(value: card.confidence)
                 }
+                #endif
 
                 HStack {
                     Text("Captured")
@@ -71,11 +73,13 @@ struct CardDetailView: View {
             }
 
             // Raw OCR text
+            #if DEBUG
             Section("Raw OCR Text") {
                 Text(card.rawText)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            #endif
 
             // Actions
             Section {

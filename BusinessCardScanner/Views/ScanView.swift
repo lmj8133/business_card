@@ -166,6 +166,7 @@ struct ScanResultView: View {
                     LabeledRow(label: "Email", value: card.email)
                 }
 
+                #if DEBUG
                 Section("Confidence") {
                     HStack {
                         Text("Score")
@@ -181,6 +182,7 @@ struct ScanResultView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                #endif
             }
             .navigationTitle("Scan Result")
             .navigationBarTitleDisplayMode(.inline)
