@@ -6,15 +6,30 @@ struct CardListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \BusinessCard.capturedAt, order: .reverse) private var cards: [BusinessCard]
     @State private var searchText = ""
+    @State private var selectedTag: String?
+
+    private var allTags: [String] {
+        Array(Set(cards.flatMap(\.tags))).sorted()
+    }
 
     private var filteredCards: [BusinessCard] {
-        guard !searchText.isEmpty else { return cards }
+        var result = cards
+
+        // Filter by selected tag
+        if let selectedTag {
+            result = result.filter { $0.tags.contains(selectedTag) }
+        }
+
+        // Filter by search text
+        guard !searchText.isEmpty else { return result }
         let query = searchText.lowercased()
-        return cards.filter { card in
+        return result.filter { card in
             card.name.lowercased().contains(query)
                 || (card.company?.lowercased().contains(query) ?? false)
                 || (card.email?.lowercased().contains(query) ?? false)
                 || (card.position?.lowercased().contains(query) ?? false)
+                || (card.notes?.lowercased().contains(query) ?? false)
+                || card.tags.contains { $0.lowercased().contains(query) }
         }
     }
 
@@ -28,13 +43,34 @@ struct CardListView: View {
                         description: Text("Scan a business card to get started.")
                     )
                 } else {
-                    List {
-                        ForEach(filteredCards) { card in
-                            NavigationLink(value: card) {
-                                CardRow(card: card)
+                    VStack(spacing: 0) {
+                        // Tag filter bar
+                        if !allTags.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(allTags, id: \.self) { tag in
+                                        TagFilterChip(
+                                            name: tag,
+                                            isSelected: selectedTag == tag
+                                        ) {
+                                            selectedTag = selectedTag == tag ? nil : tag
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
                             }
+                            .background(.bar)
                         }
-                        .onDelete(perform: deleteCards)
+
+                        List {
+                            ForEach(filteredCards) { card in
+                                NavigationLink(value: card) {
+                                    CardRow(card: card)
+                                }
+                            }
+                            .onDelete(perform: deleteCards)
+                        }
                     }
                     .searchable(text: $searchText, prompt: "Search cards")
                 }
@@ -53,10 +89,37 @@ struct CardListView: View {
     }
 }
 
+// MARK: - Tag Filter Chip
+
+struct TagFilterChip: View {
+    let name: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(name)
+                .font(.caption)
+                .fontWeight(isSelected ? .semibold : .regular)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(
+                    isSelected ? Color.blue : Color.gray.opacity(0.15),
+                    in: Capsule()
+                )
+                .foregroundStyle(isSelected ? .white : .primary)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 // MARK: - Card Row
 
 struct CardRow: View {
     let card: BusinessCard
+
+    private var visibleTags: [String] { Array(card.tags.prefix(3)) }
+    private var extraTagCount: Int { max(0, card.tags.count - 3) }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -92,6 +155,20 @@ struct CardRow: View {
                     Text(position)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
+                }
+
+                // Tags
+                if !card.tags.isEmpty {
+                    HStack(spacing: 4) {
+                        ForEach(visibleTags, id: \.self) { tag in
+                            TagBadge(name: tag)
+                        }
+                        if extraTagCount > 0 {
+                            Text("+\(extraTagCount)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
             }
 

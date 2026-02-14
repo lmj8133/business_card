@@ -24,8 +24,11 @@ extension BusinessCard {
             ]
         }
 
-        // Add a note about the source
-        contact.note = "Scanned from business card on \(capturedAt.formatted(date: .abbreviated, time: .shortened))"
+        // Add a note about the source, user notes, and tags
+        var noteParts = ["Scanned from business card on \(capturedAt.formatted(date: .abbreviated, time: .shortened))"]
+        if let notes, !notes.isEmpty { noteParts.append("Notes: \(notes)") }
+        if !tags.isEmpty { noteParts.append("Tags: \(tags.joined(separator: ", "))") }
+        contact.note = noteParts.joined(separator: "\n")
 
         return contact
     }

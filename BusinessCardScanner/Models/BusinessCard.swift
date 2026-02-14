@@ -13,6 +13,10 @@ class BusinessCard {
     var capturedAt: Date
     var imageData: Data?
 
+    // User-editable metadata
+    var notes: String?
+    var tags: [String] = []
+
     // Metadata (flattened, no need for a separate table)
     var ocrBackend: String?
     var extractorBackend: String?
@@ -27,6 +31,8 @@ class BusinessCard {
         confidence: Double = 0.0,
         capturedAt: Date = .now,
         imageData: Data? = nil,
+        notes: String? = nil,
+        tags: [String] = [],
         ocrBackend: String? = nil,
         extractorBackend: String? = nil,
         processingTimeMs: Double? = nil
@@ -39,6 +45,8 @@ class BusinessCard {
         self.confidence = confidence
         self.capturedAt = capturedAt
         self.imageData = imageData
+        self.notes = notes
+        self.tags = tags
         self.ocrBackend = ocrBackend
         self.extractorBackend = extractorBackend
         self.processingTimeMs = processingTimeMs

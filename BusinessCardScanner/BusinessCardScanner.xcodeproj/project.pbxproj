@@ -22,6 +22,7 @@
 		D141914F9BD4D4EBB6AC2862 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530837FF3C734F22F33A8B4 /* CameraView.swift */; };
 		DD70FA48B3AABFBFDD0E2540 /* OCREngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCE8BE2828221A34048454F /* OCREngine.swift */; };
 		EB2636B14BE0FF96F4F6CF02 /* BusinessCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBD488ABBDAC5E1A9869949 /* BusinessCard.swift */; };
+		F1A2B3C4D5E6F708A9B0C1D2 /* TagComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* TagComponents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		E5E827D94E093493E9A5CEC2 /* BusinessCardScanner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BusinessCardScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3F1CAD6CED06D7D44C4703A /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5C /* TagComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagComponents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -111,12 +113,21 @@
 			path = .;
 			sourceTree = "<group>";
 		};
+		D2E3F4A5B6C7D8E9F0A1B2C3 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60718293A4B5C /* TagComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		DA5430122B3CC5436701809A /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				1530837FF3C734F22F33A8B4 /* CameraView.swift */,
 				E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */,
 				F3F1CAD6CED06D7D44C4703A /* CardListView.swift */,
+				D2E3F4A5B6C7D8E9F0A1B2C3 /* Components */,
 				4899797505B0D2BD213DB9C2 /* ScanView.swift */,
 				78792F8DB3F2206D45263BBF /* SettingsView.swift */,
 			);
@@ -230,6 +241,7 @@
 				8545FDC4E42537EB63046715 /* OllamaExtractor.swift in Sources */,
 				B8CDE8E49725F1B3D9345100 /* ScanView.swift in Sources */,
 				49BDD4F67AE39D0C4BAA80E7 /* SettingsView.swift in Sources */,
+				F1A2B3C4D5E6F708A9B0C1D2 /* TagComponents.swift in Sources */,
 				5D993A9A9356A10AEBF14485 /* VisionOCREngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

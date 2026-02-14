@@ -1,9 +1,11 @@
 import Contacts
+import SwiftData
 import SwiftUI
 
 /// Detail view for a scanned business card with editing and contact export.
 struct CardDetailView: View {
     @Bindable var card: BusinessCard
+    @Query(sort: \BusinessCard.capturedAt, order: .reverse) private var allCards: [BusinessCard]
     @State private var showContactAlert = false
     @State private var contactAlertMessage = ""
 
@@ -27,6 +29,20 @@ struct CardDetailView: View {
                 OptionalEditableField(label: "Company", text: $card.company)
                 OptionalEditableField(label: "Position", text: $card.position)
                 OptionalEditableField(label: "Email", text: $card.email)
+            }
+
+            // Tags
+            Section("Tags") {
+                TagInputField(tags: $card.tags, allCards: allCards)
+            }
+
+            // Notes
+            Section("Notes") {
+                TextField("Add notes…", text: Binding(
+                    get: { card.notes ?? "" },
+                    set: { card.notes = $0.isEmpty ? nil : $0 }
+                ), axis: .vertical)
+                .lineLimit(3...6)
             }
 
             // Metadata

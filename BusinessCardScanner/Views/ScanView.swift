@@ -152,7 +152,8 @@ struct ScanView: View {
 // MARK: - Scan Result View
 
 struct ScanResultView: View {
-    let card: BusinessCard
+    @Bindable var card: BusinessCard
+    @Query(sort: \BusinessCard.capturedAt, order: .reverse) private var allCards: [BusinessCard]
     let onSave: () -> Void
     let onDiscard: () -> Void
 
@@ -164,6 +165,18 @@ struct ScanResultView: View {
                     LabeledRow(label: "Company", value: card.company)
                     LabeledRow(label: "Position", value: card.position)
                     LabeledRow(label: "Email", value: card.email)
+                }
+
+                Section("Tags") {
+                    TagInputField(tags: $card.tags, allCards: allCards)
+                }
+
+                Section("Notes") {
+                    TextField("Add notes…", text: Binding(
+                        get: { card.notes ?? "" },
+                        set: { card.notes = $0.isEmpty ? nil : $0 }
+                    ), axis: .vertical)
+                    .lineLimit(3...6)
                 }
 
                 #if DEBUG
