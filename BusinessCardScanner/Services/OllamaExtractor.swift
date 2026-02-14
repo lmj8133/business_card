@@ -23,7 +23,7 @@ final class OllamaExtractor: CardExtractor {
     }
 
     Guidelines:
-    - Cross-validate company name with email domain (e.g., if email is "@algoltek.com", company is likely "Algoltek")
+    - Cross-validate company name with email domain (e.g., if email is "@acme.com", company is likely "Acme")
     - Cross-validate name with email prefix (e.g., "jeff.fu@" suggests name is "Jeff Fu"; use to fix OCR errors like "Jeft Fu" -> "Jeff Fu")
     - Cross-validate email prefix with name (e.g., if name is "Jeff Fu" but email shows "jeft.fu@", correct to "jeff.fu@")
     - When name and email prefix conflict, prefer email (more reliable OCR) unless email is abbreviated or doesn't contain name info
@@ -47,10 +47,14 @@ final class OllamaExtractor: CardExtractor {
 
     // MARK: - Configuration
 
-    /// Ollama server base URL (configurable from Settings).
+    /// Ollama server base URL (injected via Secrets.xcconfig → Info.plist).
     var baseURL: String {
-        UserDefaults.standard.string(forKey: "ollamaBaseURL")
-            ?? "http://localhost:11434"
+        let url = Bundle.main.infoDictionary?["OllamaBaseURL"] as? String ?? ""
+        if url.isEmpty || url.contains("$(") {
+            assertionFailure("OllamaBaseURL not configured. Check Secrets.xcconfig.")
+            return "http://localhost:11434"
+        }
+        return url
     }
 
     /// Ollama model name (configurable from Settings).

@@ -66,7 +66,7 @@ def parse(
         str,
         typer.Option(
             "--ollama-url",
-            help="Ollama server base URL (default: http://localhost:11434)",
+            help="Ollama server base URL",
         ),
     ] = "http://localhost:11434",
 ):
@@ -208,7 +208,7 @@ def batch(
         str,
         typer.Option(
             "--ollama-url",
-            help="Ollama server base URL (default: http://localhost:11434)",
+            help="Ollama server base URL",
         ),
     ] = "http://localhost:11434",
 ):

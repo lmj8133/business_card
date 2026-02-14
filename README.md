@@ -120,6 +120,36 @@ ocr = PaddleOCRBackend(lang="en", auto_crop=False)
 }
 ```
 
+## iOS App (BusinessCardScanner)
+
+### Setup
+
+1. Install [XcodeGen](https://github.com/yonaskolb/XcodeGen):
+   ```bash
+   brew install xcodegen
+   ```
+
+2. Create your `Secrets.xcconfig` from the template:
+   ```bash
+   cd BusinessCardScanner
+   cp Secrets.xcconfig.example Secrets.xcconfig
+   ```
+
+3. Edit `Secrets.xcconfig` and fill in your values:
+   ```
+   OLLAMA_BASE_URL = http:/$()/your-server:11434
+   DEVELOPMENT_TEAM = YOUR_APPLE_TEAM_ID
+   PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.BusinessCardScanner
+   ```
+
+4. Generate the Xcode project and open it:
+   ```bash
+   xcodegen generate
+   open BusinessCardScanner.xcodeproj
+   ```
+
+> **Note:** `Secrets.xcconfig` is gitignored. Each developer must create their own copy from the example.
+
 ## Development
 
 ### Run Tests

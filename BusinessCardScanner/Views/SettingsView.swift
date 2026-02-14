@@ -2,7 +2,6 @@ import SwiftUI
 
 /// App settings — Ollama server configuration and OCR preferences.
 struct SettingsView: View {
-    @AppStorage("ollamaBaseURL") private var ollamaBaseURL = "http://localhost:11434"
     @AppStorage("ollamaModel") private var ollamaModel = "gemma3:27b"
     @AppStorage("ocrLanguages") private var ocrLanguages = "zh-Hant,en,ja"
 
@@ -14,15 +13,6 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("Ollama Server") {
-                    HStack {
-                        Text("URL")
-                            .frame(width: 60, alignment: .leading)
-                        TextField("http://192.168.1.100:11434", text: $ollamaBaseURL)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .keyboardType(.URL)
-                    }
-
                     HStack {
                         Text("Model")
                             .frame(width: 60, alignment: .leading)
@@ -95,6 +85,12 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
         }
+    }
+
+    /// Ollama server base URL (injected via Secrets.xcconfig → Info.plist).
+    private var ollamaBaseURL: String {
+        Bundle.main.infoDictionary?["OllamaBaseURL"] as? String
+            ?? "http://localhost:11434"
     }
 
     // MARK: - Connection Test

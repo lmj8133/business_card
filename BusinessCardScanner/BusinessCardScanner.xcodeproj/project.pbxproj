@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		256068420BD865C36434364A /* BusinessCardParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D62658D610F7FD648ECCA0 /* BusinessCardParser.swift */; };
+		49BDD4F67AE39D0C4BAA80E7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78792F8DB3F2206D45263BBF /* SettingsView.swift */; };
+		5C6F5F5E3C1E449C591520DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DCDF6C4295B51067B28A351 /* Assets.xcassets */; };
+		5D993A9A9356A10AEBF14485 /* VisionOCREngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF8513BC51320C96E9C77DC /* VisionOCREngine.swift */; };
+		734AD5978E7434B366E8C8D2 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */; };
+		8545FDC4E42537EB63046715 /* OllamaExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03AD924C194231A48808546 /* OllamaExtractor.swift */; };
+		8E315A6AF33F68E67C0063BF /* BusinessCardScannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F03A95BCD6B38E31DC3B8B /* BusinessCardScannerApp.swift */; };
+		9A561E74CB8EDE6DDC8B8955 /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F1CAD6CED06D7D44C4703A /* CardListView.swift */; };
+		ABCA173D7E32D9F507FA6487 /* CardExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C64092DF974EAA5E2948681 /* CardExtractor.swift */; };
+		B8CDE8E49725F1B3D9345100 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4899797505B0D2BD213DB9C2 /* ScanView.swift */; };
+		BF89B55A77ACD5F5BA89F005 /* OCRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1312F5AE07D4F04E656C8B6D /* OCRResult.swift */; };
+		C7BE874AE40E98BDD4FC6917 /* BusinessCard+Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187ED930ED3779C1DE3985BA /* BusinessCard+Contact.swift */; };
+		D141914F9BD4D4EBB6AC2862 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1530837FF3C734F22F33A8B4 /* CameraView.swift */; };
+		DD70FA48B3AABFBFDD0E2540 /* OCREngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BCE8BE2828221A34048454F /* OCREngine.swift */; };
+		EB2636B14BE0FF96F4F6CF02 /* BusinessCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBD488ABBDAC5E1A9869949 /* BusinessCard.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03F03A95BCD6B38E31DC3B8B /* BusinessCardScannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardScannerApp.swift; sourceTree = "<group>"; };
+		1312F5AE07D4F04E656C8B6D /* OCRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRResult.swift; sourceTree = "<group>"; };
+		1530837FF3C734F22F33A8B4 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		187ED930ED3779C1DE3985BA /* BusinessCard+Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusinessCard+Contact.swift"; sourceTree = "<group>"; };
+		1FBD488ABBDAC5E1A9869949 /* BusinessCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCard.swift; sourceTree = "<group>"; };
+		269BB23D056926D60D6A3E21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		388B31B4A7BF2907AB444C3D /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		4899797505B0D2BD213DB9C2 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		78792F8DB3F2206D45263BBF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		9BCE8BE2828221A34048454F /* OCREngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCREngine.swift; sourceTree = "<group>"; };
+		9BF8513BC51320C96E9C77DC /* VisionOCREngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionOCREngine.swift; sourceTree = "<group>"; };
+		9C64092DF974EAA5E2948681 /* CardExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardExtractor.swift; sourceTree = "<group>"; };
+		9DCDF6C4295B51067B28A351 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C03AD924C194231A48808546 /* OllamaExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaExtractor.swift; sourceTree = "<group>"; };
+		C2D62658D610F7FD648ECCA0 /* BusinessCardParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardParser.swift; sourceTree = "<group>"; };
+		E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
+		E5E827D94E093493E9A5CEC2 /* BusinessCardScanner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BusinessCardScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3F1CAD6CED06D7D44C4703A /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		19A4D8796AAFE638CBC7CA06 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C2D62658D610F7FD648ECCA0 /* BusinessCardParser.swift */,
+				9C64092DF974EAA5E2948681 /* CardExtractor.swift */,
+				9BCE8BE2828221A34048454F /* OCREngine.swift */,
+				C03AD924C194231A48808546 /* OllamaExtractor.swift */,
+				9BF8513BC51320C96E9C77DC /* VisionOCREngine.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		510719834BE1952060A68861 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1FBD488ABBDAC5E1A9869949 /* BusinessCard.swift */,
+				1312F5AE07D4F04E656C8B6D /* OCRResult.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5CFF9EA8FD6CDC4A7DA78454 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E5E827D94E093493E9A5CEC2 /* BusinessCardScanner.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8184A8ACB3EEA77C4E60E768 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				187ED930ED3779C1DE3985BA /* BusinessCard+Contact.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		AA7C86DCB819B5AFF44204AF = {
+			isa = PBXGroup;
+			children = (
+				B62E63D747D21094127E93D1 /* BusinessCardScanner */,
+				8184A8ACB3EEA77C4E60E768 /* Extensions */,
+				510719834BE1952060A68861 /* Models */,
+				19A4D8796AAFE638CBC7CA06 /* Services */,
+				DA5430122B3CC5436701809A /* Views */,
+				5CFF9EA8FD6CDC4A7DA78454 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B62E63D747D21094127E93D1 /* BusinessCardScanner */ = {
+			isa = PBXGroup;
+			children = (
+				9DCDF6C4295B51067B28A351 /* Assets.xcassets */,
+				03F03A95BCD6B38E31DC3B8B /* BusinessCardScannerApp.swift */,
+				269BB23D056926D60D6A3E21 /* Info.plist */,
+				388B31B4A7BF2907AB444C3D /* Secrets.xcconfig */,
+				8184A8ACB3EEA77C4E60E768 /* Extensions */,
+				510719834BE1952060A68861 /* Models */,
+				19A4D8796AAFE638CBC7CA06 /* Services */,
+				DA5430122B3CC5436701809A /* Views */,
+			);
+			name = BusinessCardScanner;
+			path = .;
+			sourceTree = "<group>";
+		};
+		DA5430122B3CC5436701809A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1530837FF3C734F22F33A8B4 /* CameraView.swift */,
+				E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */,
+				F3F1CAD6CED06D7D44C4703A /* CardListView.swift */,
+				4899797505B0D2BD213DB9C2 /* ScanView.swift */,
+				78792F8DB3F2206D45263BBF /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B71F99CFC4DF5DAD8181094C /* BusinessCardScanner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6073A562EB26C23052B233FC /* Build configuration list for PBXNativeTarget "BusinessCardScanner" */;
+			buildPhases = (
+				5AC9A7541C485DC4EDB2FF76 /* Check Secrets.xcconfig */,
+				F6D8485828E2008C697FD4FA /* Sources */,
+				B49AE6F86CD805FA08134B7C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BusinessCardScanner;
+			packageProductDependencies = (
+			);
+			productName = BusinessCardScanner;
+			productReference = E5E827D94E093493E9A5CEC2 /* BusinessCardScanner.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B910D20F95B1ABBF1956CDFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					B71F99CFC4DF5DAD8181094C = {
+						DevelopmentTeam = "$(DEVELOPMENT_TEAM)";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = EC82F02D7B3E863B8D6B5F3B /* Build configuration list for PBXProject "BusinessCardScanner" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AA7C86DCB819B5AFF44204AF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B71F99CFC4DF5DAD8181094C /* BusinessCardScanner */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B49AE6F86CD805FA08134B7C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C6F5F5E3C1E449C591520DE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5AC9A7541C485DC4EDB2FF76 /* Check Secrets.xcconfig */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check Secrets.xcconfig";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ! -f \"${PROJECT_DIR}/Secrets.xcconfig\" ]; then\n  echo \"error: Secrets.xcconfig not found. Copy Secrets.xcconfig.example to Secrets.xcconfig and fill in OLLAMA_BASE_URL, DEVELOPMENT_TEAM, and PRODUCT_BUNDLE_IDENTIFIER.\"\n  exit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F6D8485828E2008C697FD4FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7BE874AE40E98BDD4FC6917 /* BusinessCard+Contact.swift in Sources */,
+				EB2636B14BE0FF96F4F6CF02 /* BusinessCard.swift in Sources */,
+				256068420BD865C36434364A /* BusinessCardParser.swift in Sources */,
+				8E315A6AF33F68E67C0063BF /* BusinessCardScannerApp.swift in Sources */,
+				D141914F9BD4D4EBB6AC2862 /* CameraView.swift in Sources */,
+				734AD5978E7434B366E8C8D2 /* CardDetailView.swift in Sources */,
+				ABCA173D7E32D9F507FA6487 /* CardExtractor.swift in Sources */,
+				9A561E74CB8EDE6DDC8B8955 /* CardListView.swift in Sources */,
+				DD70FA48B3AABFBFDD0E2540 /* OCREngine.swift in Sources */,
+				BF89B55A77ACD5F5BA89F005 /* OCRResult.swift in Sources */,
+				8545FDC4E42537EB63046715 /* OllamaExtractor.swift in Sources */,
+				B8CDE8E49725F1B3D9345100 /* ScanView.swift in Sources */,
+				49BDD4F67AE39D0C4BAA80E7 /* SettingsView.swift in Sources */,
+				5D993A9A9356A10AEBF14485 /* VisionOCREngine.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0F479C25733F951DDE53F10A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		219C8C1475F872227C1D892A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		562B2C86C5C77C381F15ABC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 388B31B4A7BF2907AB444C3D /* Secrets.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		AA1065A04DE1DC03C92792B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 388B31B4A7BF2907AB444C3D /* Secrets.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6073A562EB26C23052B233FC /* Build configuration list for PBXNativeTarget "BusinessCardScanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				562B2C86C5C77C381F15ABC3 /* Debug */,
+				AA1065A04DE1DC03C92792B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EC82F02D7B3E863B8D6B5F3B /* Build configuration list for PBXProject "BusinessCardScanner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				219C8C1475F872227C1D892A /* Debug */,
+				0F479C25733F951DDE53F10A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B910D20F95B1ABBF1956CDFF /* Project object */;
+}
