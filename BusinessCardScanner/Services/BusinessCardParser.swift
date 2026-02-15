@@ -42,7 +42,7 @@ final class BusinessCardParser: ObservableObject {
             company: extracted.company,
             name: extracted.name,
             position: extracted.position,
-            email: extracted.email,
+            email: extracted.email?.lowercased(),
             rawText: ocrResult.text,
             confidence: extracted.confidence,
             imageData: (ocrResult.processedImage ?? image).pngData(),

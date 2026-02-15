@@ -23,12 +23,12 @@ final class OllamaExtractor: CardExtractor {
     }
 
     Guidelines:
-    - Cross-validate company name with email domain (e.g., if email is "@acme.com", company is likely "Acme")
-    - Cross-validate name with email prefix (e.g., "jeff.fu@" suggests name is "Jeff Fu"; use to fix OCR errors like "Jeft Fu" -> "Jeff Fu")
-    - Cross-validate email prefix with name (e.g., if name is "Jeff Fu" but email shows "jeft.fu@", correct to "jeff.fu@")
+    - Cross-validate company name with email domain (e.g., if email is "@example.com", company is likely "Example")
+    - Cross-validate name with email prefix (e.g., "jane.doe@" suggests name is "Jane Doe"; use to fix OCR errors like "Jare Doe" -> "Jane Doe")
+    - Cross-validate email prefix with name (e.g., if name is "Jane Doe" but email shows "jare.doe@", correct to "jane.doe@")
     - When name and email prefix conflict, prefer email (more reliable OCR) unless email is abbreviated or doesn't contain name info
     - If multiple emails exist, pick the primary one (typically the person's own email)
-    - Split names by case transitions: "MJLi" -> "MJ Li", "JohnSmith" -> "John Smith"
+    - Split names by case transitions: "ABChen" -> "AB Chen", "JohnSmith" -> "John Smith"
     - Common OCR confusions: L↔I, O↔0, 1↔l - use context to resolve
     - Always return valid JSON
     """
