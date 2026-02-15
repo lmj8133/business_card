@@ -1,16 +1,21 @@
 import Contacts
 import SwiftData
 import SwiftUI
+import UIKit
 
 /// Detail view for a scanned business card with editing and contact export.
 struct CardDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Bindable var card: BusinessCard
     @Query(sort: \BusinessCard.capturedAt, order: .reverse) private var allCards: [BusinessCard]
     @State private var showContactAlert = false
+    @State private var contactAlertTitle = ""
     @State private var contactAlertMessage = ""
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
-        List {
+        Form {
             // Card image
             if let imageData = card.imageData, let uiImage = UIImage(data: imageData) {
                 Section {
@@ -28,7 +33,7 @@ struct CardDetailView: View {
                 EditableField(label: "Name", text: $card.name)
                 OptionalEditableField(label: "Company", text: $card.company)
                 OptionalEditableField(label: "Position", text: $card.position)
-                OptionalEditableField(label: "Email", text: $card.email)
+                OptionalEditableField(label: "Email", text: $card.email, keyboardType: .emailAddress)
             }
 
             // Tags
@@ -46,14 +51,13 @@ struct CardDetailView: View {
             }
 
             // Metadata
+            #if DEBUG
             Section("Details") {
-                #if DEBUG
                 HStack {
                     Text("Confidence")
                     Spacer()
                     ConfidenceBadge(value: card.confidence)
                 }
-                #endif
 
                 HStack {
                     Text("Captured")
@@ -87,6 +91,7 @@ struct CardDetailView: View {
                     }
                 }
             }
+            #endif
 
             // Raw OCR text
             #if DEBUG
@@ -105,10 +110,27 @@ struct CardDetailView: View {
                     Label("Save to Contacts", systemImage: "person.crop.circle.badge.plus")
                 }
             }
+
+            Section {
+                Button("Delete Card", role: .destructive) {
+                    showDeleteConfirmation = true
+                }
+            }
         }
         .navigationTitle(card.name)
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Contacts", isPresented: $showContactAlert) {
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                ShareLink(item: card.shareText)
+            }
+        }
+        .confirmationDialog("Delete this card?", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                modelContext.delete(card)
+                dismiss()
+            }
+        }
+        .alert(contactAlertTitle, isPresented: $showContactAlert) {
             Button("OK") {}
         } message: {
             Text(contactAlertMessage)
@@ -122,6 +144,7 @@ struct CardDetailView: View {
         store.requestAccess(for: .contacts) { granted, error in
             DispatchQueue.main.async {
                 guard granted else {
+                    contactAlertTitle = "Error"
                     contactAlertMessage = "Contacts access denied. Please enable in Settings."
                     showContactAlert = true
                     return
@@ -133,8 +156,11 @@ struct CardDetailView: View {
 
                 do {
                     try store.execute(saveRequest)
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    contactAlertTitle = "Saved"
                     contactAlertMessage = "Contact saved successfully."
                 } catch {
+                    contactAlertTitle = "Error"
                     contactAlertMessage = "Failed to save contact: \(error.localizedDescription)"
                 }
                 showContactAlert = true
@@ -150,10 +176,7 @@ struct EditableField: View {
     @Binding var text: String
 
     var body: some View {
-        HStack {
-            Text(label)
-                .foregroundStyle(.secondary)
-                .frame(width: 80, alignment: .leading)
+        LabeledContent(label) {
             TextField(label, text: $text)
                 .multilineTextAlignment(.trailing)
         }
@@ -163,17 +186,18 @@ struct EditableField: View {
 struct OptionalEditableField: View {
     let label: String
     @Binding var text: String?
+    var keyboardType: UIKeyboardType = .default
 
     var body: some View {
-        HStack {
-            Text(label)
-                .foregroundStyle(.secondary)
-                .frame(width: 80, alignment: .leading)
+        LabeledContent(label) {
             TextField(label, text: Binding(
                 get: { text ?? "" },
                 set: { text = $0.isEmpty ? nil : $0 }
             ))
             .multilineTextAlignment(.trailing)
+            .keyboardType(keyboardType)
+            .autocorrectionDisabled(keyboardType == .emailAddress)
+            .textInputAutocapitalization(keyboardType == .emailAddress ? .never : .sentences)
         }
     }
 }

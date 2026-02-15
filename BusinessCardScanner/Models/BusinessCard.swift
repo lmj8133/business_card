@@ -22,6 +22,15 @@ class BusinessCard {
     var extractorBackend: String?
     var processingTimeMs: Double?
 
+    /// Plain-text summary suitable for sharing via ShareLink.
+    var shareText: String {
+        var lines = [name]
+        if let position { lines.append(position) }
+        if let company { lines.append(company) }
+        if let email { lines.append(email) }
+        return lines.joined(separator: "\n")
+    }
+
     init(
         company: String? = nil,
         name: String,

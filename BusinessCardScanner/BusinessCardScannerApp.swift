@@ -24,6 +24,8 @@ struct BusinessCardScannerApp: App {
 }
 
 struct ContentView: View {
+    @StateObject private var parser = BusinessCardParser()
+
     var body: some View {
         TabView {
             CardListView()
@@ -41,5 +43,6 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gear")
                 }
         }
+        .environmentObject(parser)
     }
 }

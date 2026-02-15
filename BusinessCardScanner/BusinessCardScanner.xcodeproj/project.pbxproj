@@ -12,6 +12,7 @@
 		49BDD4F67AE39D0C4BAA80E7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78792F8DB3F2206D45263BBF /* SettingsView.swift */; };
 		5C6F5F5E3C1E449C591520DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DCDF6C4295B51067B28A351 /* Assets.xcassets */; };
 		5D993A9A9356A10AEBF14485 /* VisionOCREngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF8513BC51320C96E9C77DC /* VisionOCREngine.swift */; };
+		6B4A2E1F8C3D5A9B0E7F1234 /* CardPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5B6C7D8E9F0A1B2C3D4E5F /* CardPagerView.swift */; };
 		734AD5978E7434B366E8C8D2 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */; };
 		8545FDC4E42537EB63046715 /* OllamaExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03AD924C194231A48808546 /* OllamaExtractor.swift */; };
 		8E315A6AF33F68E67C0063BF /* BusinessCardScannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F03A95BCD6B38E31DC3B8B /* BusinessCardScannerApp.swift */; };
@@ -43,6 +44,7 @@
 		9DCDF6C4295B51067B28A351 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C03AD924C194231A48808546 /* OllamaExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaExtractor.swift; sourceTree = "<group>"; };
 		C2D62658D610F7FD648ECCA0 /* BusinessCardParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardParser.swift; sourceTree = "<group>"; };
+		3A5B6C7D8E9F0A1B2C3D4E5F /* CardPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPagerView.swift; sourceTree = "<group>"; };
 		E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		E5E827D94E093493E9A5CEC2 /* BusinessCardScanner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BusinessCardScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3F1CAD6CED06D7D44C4703A /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				1530837FF3C734F22F33A8B4 /* CameraView.swift */,
 				E3F7EE9A7B77FD3017997143 /* CardDetailView.swift */,
 				F3F1CAD6CED06D7D44C4703A /* CardListView.swift */,
+				3A5B6C7D8E9F0A1B2C3D4E5F /* CardPagerView.swift */,
 				D2E3F4A5B6C7D8E9F0A1B2C3 /* Components */,
 				4899797505B0D2BD213DB9C2 /* ScanView.swift */,
 				78792F8DB3F2206D45263BBF /* SettingsView.swift */,
@@ -240,6 +243,7 @@
 				734AD5978E7434B366E8C8D2 /* CardDetailView.swift in Sources */,
 				ABCA173D7E32D9F507FA6487 /* CardExtractor.swift in Sources */,
 				9A561E74CB8EDE6DDC8B8955 /* CardListView.swift in Sources */,
+				6B4A2E1F8C3D5A9B0E7F1234 /* CardPagerView.swift in Sources */,
 				DD70FA48B3AABFBFDD0E2540 /* OCREngine.swift in Sources */,
 				BF89B55A77ACD5F5BA89F005 /* OCRResult.swift in Sources */,
 				8545FDC4E42537EB63046715 /* OllamaExtractor.swift in Sources */,
@@ -386,7 +390,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -408,7 +412,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_BUNDLE_IDENTIFIER)";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;

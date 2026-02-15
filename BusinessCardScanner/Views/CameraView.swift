@@ -344,6 +344,7 @@ final class CameraViewController: UIViewController {
     private var capturedObservation: VNRectangleObservation?
 
     @objc private func capturePhoto() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         // Snapshot geometry in view coordinates before capture
         capturedGuideRect = guideRect
         capturedPreviewBounds = previewLayer.bounds

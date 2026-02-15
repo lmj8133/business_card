@@ -12,23 +12,24 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Ollama Server") {
-                    HStack {
-                        Text("Model")
-                            .frame(width: 60, alignment: .leading)
-                        if availableModels.isEmpty {
+                Section("Server") {
+                    #if DEBUG
+                    if availableModels.isEmpty {
+                        LabeledContent("Model") {
                             TextField("gemma3:12b", text: $ollamaModel)
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
-                        } else {
-                            Picker("", selection: $ollamaModel) {
-                                ForEach(availableModels, id: \.self) { model in
-                                    Text(model).tag(model)
-                                }
-                            }
-                            .pickerStyle(.menu)
+                                .multilineTextAlignment(.trailing)
                         }
+                    } else {
+                        Picker("Model", selection: $ollamaModel) {
+                            ForEach(availableModels, id: \.self) { model in
+                                Text(model).tag(model)
+                            }
+                        }
+                        .pickerStyle(.menu)
                     }
+                    #endif
 
                     Button {
                         Task { await testConnection() }
@@ -52,6 +53,7 @@ struct SettingsView: View {
                     }
                 }
 
+                #if DEBUG
                 Section("OCR") {
                     HStack {
                         Text("Languages")
@@ -66,26 +68,31 @@ struct SettingsView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                #endif
 
                 Section("About") {
                     HStack {
                         Text("Version")
                         Spacer()
-                        Text("1.0.0")
+                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                             .foregroundStyle(.secondary)
                     }
 
+                    #if DEBUG
                     HStack {
                         Text("OCR Engine")
                         Spacer()
                         Text("Apple Vision")
                             .foregroundStyle(.secondary)
                     }
+                    #endif
                 }
             }
             .navigationTitle("Settings")
         }
     }
+
+    private let genericError = "Unable to connect to server"
 
     /// Ollama server base URL (injected via Secrets.xcconfig → Info.plist).
     private var ollamaBaseURL: String {
@@ -103,10 +110,9 @@ struct SettingsView: View {
         case .success:
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(.green)
-        case .failure(let msg):
+        case .failure:
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.red)
-                .help(msg)
         }
     }
 
@@ -125,7 +131,7 @@ struct SettingsView: View {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-                connectionStatus = .failure("Unexpected status code")
+                connectionStatus = .failure(genericError)
                 return
             }
 
@@ -133,7 +139,7 @@ struct SettingsView: View {
             availableModels = models
 
             if models.isEmpty {
-                connectionStatus = .failure("No models installed on server")
+                connectionStatus = .failure(genericError)
             } else if models.contains(ollamaModel) {
                 connectionStatus = .success
             } else {
@@ -141,7 +147,11 @@ struct SettingsView: View {
                 connectionStatus = .success
             }
         } catch {
+            #if DEBUG
             connectionStatus = .failure(error.localizedDescription)
+            #else
+            connectionStatus = .failure(genericError)
+            #endif
         }
     }
 

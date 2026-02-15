@@ -23,8 +23,8 @@ struct TagBadge: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(.blue.opacity(0.15), in: Capsule())
-        .foregroundStyle(.blue)
+        .background(Color.accentColor.opacity(0.15), in: Capsule())
+        .foregroundStyle(Color.accentColor)
     }
 }
 
