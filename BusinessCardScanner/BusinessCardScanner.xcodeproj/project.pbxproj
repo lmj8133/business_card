@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1B2C3D4E5F6A7B8C9D0E1F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E0F1 /* AppDelegate.swift */; };
 		256068420BD865C36434364A /* BusinessCardParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D62658D610F7FD648ECCA0 /* BusinessCardParser.swift */; };
 		49BDD4F67AE39D0C4BAA80E7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78792F8DB3F2206D45263BBF /* SettingsView.swift */; };
 		5C6F5F5E3C1E449C591520DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DCDF6C4295B51067B28A351 /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		03F03A95BCD6B38E31DC3B8B /* BusinessCardScannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardScannerApp.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5A6B7C8D9E0F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1312F5AE07D4F04E656C8B6D /* OCRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRResult.swift; sourceTree = "<group>"; };
 		1530837FF3C734F22F33A8B4 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		187ED930ED3779C1DE3985BA /* BusinessCard+Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusinessCard+Contact.swift"; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		B62E63D747D21094127E93D1 /* BusinessCardScanner */ = {
 			isa = PBXGroup;
 			children = (
+				A0B1C2D3E4F5A6B7C8D9E0F1 /* AppDelegate.swift */,
 				9DCDF6C4295B51067B28A351 /* Assets.xcassets */,
 				03F03A95BCD6B38E31DC3B8B /* BusinessCardScannerApp.swift */,
 				269BB23D056926D60D6A3E21 /* Info.plist */,
@@ -228,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A1B2C3D4E5F6A7B8C9D0E1F /* AppDelegate.swift in Sources */,
 				C7BE874AE40E98BDD4FC6917 /* BusinessCard+Contact.swift in Sources */,
 				EB2636B14BE0FF96F4F6CF02 /* BusinessCard.swift in Sources */,
 				256068420BD865C36434364A /* BusinessCardParser.swift in Sources */,

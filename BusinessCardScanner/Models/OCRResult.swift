@@ -1,4 +1,4 @@
-import Foundation
+import CoreImage
 import CoreGraphics
 
 /// Single OCR detection with position.
@@ -13,6 +13,8 @@ struct OCRResult {
     let text: String
     let confidence: Float
     let boxes: [OCRBox]
+    /// The image after card detection / cropping (if any).
+    var processedImage: CIImage?
 
     static let empty = OCRResult(text: "", confidence: 0, boxes: [])
 }

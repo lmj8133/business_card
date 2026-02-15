@@ -3,6 +3,8 @@ import SwiftData
 
 @main
 struct BusinessCardScannerApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([BusinessCard.self])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)

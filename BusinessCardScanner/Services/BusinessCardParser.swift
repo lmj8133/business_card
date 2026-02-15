@@ -18,7 +18,7 @@ final class BusinessCardParser: ObservableObject {
     }
 
     /// Full pipeline: OCR + LLM extraction.
-    func parse(image: CIImage) async throws -> BusinessCard {
+    func parse(image: CIImage, skipCardDetection: Bool = false) async throws -> BusinessCard {
         isProcessing = true
         lastError = nil
         defer { isProcessing = false }
@@ -26,7 +26,7 @@ final class BusinessCardParser: ObservableObject {
         let start = CFAbsoluteTimeGetCurrent()
 
         // Step 1 & 2: Card detection + OCR (handled inside the engine)
-        let ocrResult = try await ocrEngine.recognize(in: image)
+        let ocrResult = try await ocrEngine.recognize(in: image, skipCardDetection: skipCardDetection)
 
         guard !ocrResult.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw ParserError.noTextExtracted
@@ -45,7 +45,7 @@ final class BusinessCardParser: ObservableObject {
             email: extracted.email,
             rawText: ocrResult.text,
             confidence: extracted.confidence,
-            imageData: image.pngData(),
+            imageData: (ocrResult.processedImage ?? image).pngData(),
             ocrBackend: ocrEngine.name,
             extractorBackend: extractor.name,
             processingTimeMs: (elapsedMs * 100).rounded() / 100
@@ -55,12 +55,12 @@ final class BusinessCardParser: ObservableObject {
     }
 
     /// OCR-only mode (offline fallback).
-    func parseOCROnly(image: CIImage) async throws -> OCRResult {
+    func parseOCROnly(image: CIImage, skipCardDetection: Bool = false) async throws -> OCRResult {
         isProcessing = true
         lastError = nil
         defer { isProcessing = false }
 
-        return try await ocrEngine.recognize(in: image)
+        return try await ocrEngine.recognize(in: image, skipCardDetection: skipCardDetection)
     }
 }
 
@@ -80,6 +80,13 @@ enum ParserError: LocalizedError {
 // MARK: - CIImage Helpers
 
 extension CIImage {
+    /// Render all pending transforms into actual pixels, ensuring extent.origin == (0, 0).
+    func baked() -> CIImage {
+        let ctx = CIContext()
+        guard let cgImage = ctx.createCGImage(self, from: extent) else { return self }
+        return CIImage(cgImage: cgImage)
+    }
+
     /// Convert CIImage to PNG Data for storage.
     func pngData(maxDimension: CGFloat = 800) -> Data? {
         let scale = min(maxDimension / extent.width, maxDimension / extent.height, 1.0)

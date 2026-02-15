@@ -10,21 +10,30 @@ final class VisionOCREngine: OCREngine {
 
     // MARK: - Public
 
-    func recognize(in image: CIImage) async throws -> OCRResult {
-        // Step 1: Try to detect and crop the card region
-        let cropped = (try? await detectCard(in: image)) ?? image
+    func recognize(in image: CIImage, skipCardDetection: Bool = false) async throws -> OCRResult {
+        let targetImage: CIImage
+        if skipCardDetection {
+            targetImage = image
+        } else {
+            targetImage = (try? await detectCard(in: image)) ?? image
+        }
 
-        // Step 2: Run text recognition on the (optionally cropped) image
-        return try await recognizeText(in: cropped)
+        var result = try await recognizeText(in: targetImage)
+        result.processedImage = targetImage
+        return result
     }
 
     // MARK: - Card Detection
 
     /// Detect the largest rectangle (business card) in the image.
     private func detectCard(in image: CIImage) async throws -> CIImage {
+        guard image.extent.width > 0, image.extent.height > 0 else { return image }
+
         let request = VNDetectRectanglesRequest()
-        request.minimumAspectRatio = 0.4
-        request.maximumAspectRatio = 1.0
+        // VNDetectRectanglesRequest aspect ratio = short/long (0-1).
+        // Standard business card: 53.98/85.6 ≈ 0.63; range 0.3–0.9 covers all common cards.
+        request.minimumAspectRatio = 0.3
+        request.maximumAspectRatio = 0.9
         request.minimumSize = 0.2
         request.maximumObservations = 1
         request.minimumConfidence = 0.5
@@ -55,6 +64,7 @@ final class VisionOCREngine: OCREngine {
     ) -> CIImage {
         let width = image.extent.width
         let height = image.extent.height
+        guard width > 0, height > 0 else { return image }
 
         // Vision coordinates are normalized (0-1), origin bottom-left
         let topLeft = CGPoint(
@@ -81,12 +91,19 @@ final class VisionOCREngine: OCREngine {
             "inputBottomRight": CIVector(cgPoint: bottomRight),
         ])
 
+        // CIPerspectiveCorrection can produce a zero-extent image if the
+        // quadrilateral is degenerate. Fall back to the original image.
+        guard corrected.extent.width > 0, corrected.extent.height > 0 else { return image }
         return corrected
     }
 
     // MARK: - Text Recognition
 
     private func recognizeText(in image: CIImage) async throws -> OCRResult {
+        guard image.extent.width > 0, image.extent.height > 0 else {
+            return .empty
+        }
+
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
         request.recognitionLanguages = recognitionLanguages

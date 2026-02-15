@@ -2,6 +2,7 @@ import CoreImage
 import PhotosUI
 import SwiftData
 import SwiftUI
+import UIKit
 
 /// Main scanning view — camera + photo picker + processing status.
 struct ScanView: View {
@@ -63,12 +64,19 @@ struct ScanView: View {
                 }
             }
             .navigationTitle("Scan")
-            .fullScreenCover(isPresented: $showCamera) {
-                CameraView { image in
+            .fullScreenCover(isPresented: $showCamera, onDismiss: {
+                AppDelegate.allowLandscape = false
+                UIViewController.attemptRotationToDeviceOrientation()
+            }) {
+                CameraView { image, skipCardDetection in
                     showCamera = false
-                    Task { await processImage(image) }
+                    Task { await processImage(image, skipCardDetection: skipCardDetection) }
                 }
                 .ignoresSafeArea()
+                .onAppear {
+                    AppDelegate.allowLandscape = true
+                    UIViewController.attemptRotationToDeviceOrientation()
+                }
             }
             .onChange(of: selectedPhoto) { _, newItem in
                 guard let newItem else { return }
@@ -112,20 +120,27 @@ struct ScanView: View {
             errorMessage = "Failed to load the selected photo."
             return
         }
-        await processImage(ciImage)
+        let oriented: CIImage
+        if let val = ciImage.properties[kCGImagePropertyOrientation as String] as? UInt32,
+           let cgOrientation = CGImagePropertyOrientation(rawValue: val) {
+            oriented = ciImage.oriented(cgOrientation).baked()
+        } else {
+            oriented = ciImage
+        }
+        await processImage(oriented)
     }
 
-    private func processImage(_ image: CIImage) async {
+    private func processImage(_ image: CIImage, skipCardDetection: Bool = false) async {
         do {
-            let card = try await parser.parse(image: image)
+            let card = try await parser.parse(image: image, skipCardDetection: skipCardDetection)
             scannedCard = card
             showResult = true
         } catch is URLError {
             // Network error — fall back to OCR-only mode
-            await fallbackOCROnly(image: image)
+            await fallbackOCROnly(image: image, skipCardDetection: skipCardDetection)
         } catch let error as ExtractorError {
             if case .connectionFailed = error {
-                await fallbackOCROnly(image: image)
+                await fallbackOCROnly(image: image, skipCardDetection: skipCardDetection)
             } else {
                 errorMessage = error.localizedDescription
             }
@@ -134,9 +149,9 @@ struct ScanView: View {
         }
     }
 
-    private func fallbackOCROnly(image: CIImage) async {
+    private func fallbackOCROnly(image: CIImage, skipCardDetection: Bool = false) async {
         do {
-            let result = try await parser.parseOCROnly(image: image)
+            let result = try await parser.parseOCROnly(image: image, skipCardDetection: skipCardDetection)
             if result.text.isEmpty {
                 errorMessage = "No text detected in the image."
             } else {
