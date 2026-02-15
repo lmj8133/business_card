@@ -35,7 +35,7 @@ final class CameraViewController: UIViewController {
 
     // ISO 7810 ID-1 (85.6mm × 53.98mm) — covers credit cards, most business cards, and IDs
     private let cardAspectRatio: CGFloat = 1.586
-    private let guideWidthRatio: CGFloat = 0.4          // guide width as fraction of available width
+    private let guideAreaRatio: CGFloat = 0.24           // guide frame occupies ~24% of available area
     private let guideCornerRadius: CGFloat = 10
     private let buttonAreaSize: CGFloat = 100    // reserved space for capture button (bottom in portrait, right in landscape)
     private let cornerMarkLength: CGFloat = 30            // L-shaped corner mark length
@@ -69,8 +69,7 @@ final class CameraViewController: UIViewController {
 
     /// Guide rectangle in view coordinates.
     /// The guide always uses a landscape card aspect ratio (width > height).
-    /// Portrait: button area reserved at bottom; guide uses a smaller width ratio for comfortable focus distance.
-    /// Landscape: button area reserved on the right.
+    /// Size is derived from a fixed area ratio so the frame stays visually consistent across orientations.
     private var guideRect: CGRect {
         let bounds = view.bounds
         let padding: CGFloat = 40
@@ -80,10 +79,9 @@ final class CameraViewController: UIViewController {
         let availableWidth  = portrait ? bounds.width : (bounds.width - buttonAreaSize)
         let availableHeight = portrait ? (bounds.height - buttonAreaSize) : bounds.height
 
-        // Portrait uses a smaller ratio so the card doesn't need to be too close to focus
-        let widthRatio: CGFloat = portrait ? 0.85 : guideWidthRatio
-
-        var guideWidth = availableWidth * widthRatio
+        // Derive guide width from target area ratio (orientation-independent)
+        let targetArea = availableWidth * availableHeight * guideAreaRatio
+        var guideWidth = sqrt(targetArea * cardAspectRatio)
         var guideHeight = guideWidth / cardAspectRatio
 
         // Clamp width
