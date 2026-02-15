@@ -218,8 +218,8 @@ struct ConfidenceBadge: View {
     }
 
     private var color: Color {
-        if value >= 0.8 { return .green }
-        if value >= 0.5 { return .orange }
+        if value >= 0.9 { return .green }
+        if value >= 0.7 { return .orange }
         return .red
     }
 }

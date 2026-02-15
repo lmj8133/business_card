@@ -352,7 +352,7 @@ struct ScanResultView: View {
                         Text("Score")
                         Spacer()
                         Text(String(format: "%.0f%%", card.confidence * 100))
-                            .foregroundStyle(card.confidence >= 0.7 ? .green : .orange)
+                            .foregroundStyle(card.confidence >= 0.9 ? .green : .orange)
                             .fontWeight(.semibold)
                     }
                 }

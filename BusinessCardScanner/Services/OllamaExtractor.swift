@@ -19,8 +19,14 @@ final class OllamaExtractor: CardExtractor {
       "name": "string (required)",
       "position": "string or null (combine department and title, e.g. 'Sales Dept, Manager')",
       "email": "string or null",
-      "confidence": 0.0-1.0
+      "confidence": 0.0-1.0 (see rubric below)
     }
+
+    Confidence rubric:
+    - 0.9-1.0: all fields clearly readable, cross-validated successfully
+    - 0.7-0.89: most fields clear, minor OCR corrections applied
+    - 0.4-0.69: some fields uncertain or missing
+    - 0.0-0.39: heavy OCR noise, guessing required
 
     Guidelines:
     - Cross-validate company name with email domain (e.g., if email is "@example.com", company is likely "Example")
@@ -29,19 +35,18 @@ final class OllamaExtractor: CardExtractor {
     - When name and email prefix conflict, prefer email (more reliable OCR) unless email is abbreviated or doesn't contain name info
     - If multiple emails exist, pick the primary one (typically the person's own email)
     - Split names by case transitions: "ABChen" -> "AB Chen", "JohnSmith" -> "John Smith"
+    - CJK names: typically 2-4 characters, family name first (e.g. "王大明")
+    - CJK position format: "部門, 職稱" (e.g. "行銷部, 經理"); keep original CJK text, do not translate
+    - If both Chinese and English names appear, prefer the Chinese name for "name" field
     - Common OCR confusions: L↔I, O↔0, 1↔l - use context to resolve
     - Always return valid JSON
     """
 
     static func userPrompt(ocrText: String) -> String {
         """
-        Extract business card information from this OCR text:
-
         ---
         \(ocrText)
         ---
-
-        Return only the JSON object.
         """
     }
 
